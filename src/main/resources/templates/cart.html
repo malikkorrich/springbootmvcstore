@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head>
+  <!-- Required meta tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Dzcoder Community">
+  
+  <meta name="author" content="Malik orrich">
+
+  <title>DzCoder Community</title>
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png">
+  
+  <!-- Themefisher Icon font -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- bootstrap.min css -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap-slider.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+  <!-- Main Slider -->
+  <link rel="stylesheet" href="css/slick.css">
+  <link rel="stylesheet" href="css/slick-theme.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/style_1.css">
+
+</head>
+
+<body id="body">
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white w-100 navigation" id="navbar">
+  <div class="container">
+    <a class="navbar-brand font-weight-bold" href="index.html"><img src="images/logo.png" alt="Adrian." class="img-fluid"></a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse " id="main-navbar">
+        <ul class="navbar-nav mx-auto">
+        <li class="nav-item active">
+          <a class="nav-link" th:href="@{/}">Home </a>
+        </li>
+		<li class="nav-item">
+			<a class="nav-link" sec:authorize="!isAuthenticated()" th:href="@{/auth/login}">Login</a>
+		  </li>
+
+		  <li class="nav-item">
+			<a class="nav-link" sec:authorize="!isAuthenticated()" th:href="@{/register}">Register</a>
+		  </li>
+
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/about}">About Us</a>
+        </li>
+ 
+  
+    
+
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/contact}">Contact Us</a>
+        </li>
+      </ul>
+    </div>
+    <!-- Navbar-collapse -->
+
+    <ul class="top-menu list-inline mb-0 d-none d-lg-block" id="top-menu">
+      <li class="list-inline-item">
+        <a href="#" class="search_toggle" id="search-icon"><i class="tf-ion-android-search"></i></a>
+      </li>
+
+      <li sec:authorize="isAuthenticated()" class="dropdown cart-nav dropdown-slide list-inline-item">
+        <a href="#" data-toggle="dropdown" data-hover="dropdown">
+          <i class="tf-ion-android-cart"></i>
+        </a>
+    
+      </li>
+      <li  sec:authorize="isAuthenticated()" class="dropdown cart-nav dropdown-slide list-inline-item"><a href="#"><i class="tf-ion-ios-person mr-3"></i></a>
+      
+          <div class="dropdown-menu cart-dropdown">
+          
+          <div class="media">
+            <a th:href="@{/profile}">   <span class="h6">Profile</span> </a>
+          </div> 
+
+          <div class="media">
+            <a th:href="@{/settings}">   <span class="h6">Settings</span> </a>
+          </div> 
+          <div class="media">
+            <a href="javascript:document.getElementById('logoutForm').submit()">   <span class="h6">Logout</span> </a>
+          </div> 
+        </div>
+      </li>
+ 
+    </ul>
+  </div>
+</nav>
+
+<!-- Logout Form -->
+	<form th:action="@{/auth/logout}" method="POST" id="logoutForm"></form>
+<!--search overlay start-->
+<div class="search-wrap">
+  <div class="overlay">
+    <form  class="search-form">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-10 col-9">
+            <input type="text" class="form-control"name="q"  placeholder="Search...">
+          </div>
+          <div class="col-md-2 col-3 text-right">
+            <div class="search_toggle toggle-wrap d-inline-block">
+              <img class="search-close" src="images/close.png" alt>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!--search overlay end-->
+
+ 
+ 
+ 
+
+
+<section class="cart shopping page-wrapper" th:if="${cart == null}">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-12" id="emptyCart">
+        
+        <div class="d-flex justify-content-center">
+
+        		<i class="tf-ion-android-cart" id="cart"></i>
+			</div>
+	
+			     <div class="alert alert-light" role="alert">
+			    <b>Your shoping cart is empty</b>
+ 				<p>once you have added items in your shopping cart.you can check out from here .</p><a th:href="@{/}">Continue shopping</a>
+ 				</div>
+			
+        </div>
+        </div>
+        </div>
+</section>
+ 
+<section class="cart shopping page-wrapper" th:unless="${cart == null}">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="product-list">
+              <form class="cart-form" action="#" method="post">
+                  <table class="table shop_table shop_table_responsive cart" cellspacing="0">
+                      <thead>
+                        <tr>
+                            <th class="product-thumbnail">&nbsp;</th>
+                            <th class="product-name">Product</th>
+                            <th class="product-price">Price</th>
+                            <th class="product-quantity">Quantity</th>
+                            <th class="product-subtotal">Total</th>
+                            <th class="product-remove">&nbsp;</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <tr class="cart_item" th:each="product : ${cart}">
+                            <td class="product-thumbnail" data-title="Thumbnail">
+                                <a href="#"><img th:src="${product.image}" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt></a>
+                            </td>
+
+                            <td class="product-name" data-title="Product">
+                                <a  th:text="${product.name}">Trendy Cloth</a>
+                            </td>
+
+                            <td class="product-price" data-title="Price">
+                                <span class="amount"><span class="currencySymbol" th:text="${#numbers.formatCurrency(product.price)}">$</span></span>
+                            </td>
+
+                            <td class="product-quantity" data-title="Quantity">
+                                <div class="quantity">
+                                    <label class="sr-only">Quantity</label>
+
+                                    <input type="number" id="qty" class="input-text qty text" step="1" min="0" max="9" value="1" title="Qty" size="4">
+                                </div>
+                            </td>
+                            <td class="product-subtotal" data-title="Total">
+                                <span class="amount">
+                                  <span class="currencySymbol" th:text="${#numbers.formatCurrency(product.price)}">$</span></span>
+                            </td>
+
+                             <td class="product-remove" data-title="Remove">
+                                <a th:href="@{/cart/delete/{id} (id=${product.id})}" class="remove" aria-label="Remove this item" data-product_id="30" data-product_sku>×</a>           
+                            </td>
+                        </tr>
+
+                  
+
+                        <tr>
+                            <td colspan="6" class="actions">
+                                <div class="coupon">
+
+
+
+                                <input type="hidden" id="woocommerce-cart-nonce" name="woocommerce-cart-nonce" value="27da9ce3e8">
+                                <input type="hidden" name="_wp_http_referer" value="/cart/">        
+                              </td>
+                        </tr>
+                      </tbody>
+                  </table>
+              </form>
+          </div>
+        </div>
+      </div>
+
+        <div class="row justify-content-end">
+          <div class="col-lg-4">
+            <div class="cart-info card p-4 mt-4">
+                <h4 class="mb-4">Cart totals</h4>
+
+                <ul class="list-unstyled mb-4">
+                  <li class="d-flex justify-content-between pb-2 mb-3">
+                    <h5>Subtotal</h5>
+                    <span th:text="${#numbers.formatCurrency(total_cart)}">$90.00</span>
+                  </li>
+
+                   <li class="d-flex justify-content-between pb-2 mb-3">
+                    <h5>Shipping</h5>
+                    <span>Free</span>
+                  </li>
+
+                   <li class="d-flex justify-content-between pb-2">
+                    <h5>Total</h5>
+                    <span th:text="${#numbers.formatCurrency(total_cart)}">$90.00</span>
+                  </li>
+                </ul>
+                <a th:href="@{/checkout}" class="btn btn-main btn-small">Proceed to checkout</a>
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
+ 
+ 
+
+<section class="features border-top">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-3 col-sm-6 col-md-6">
+				<div class="feature-block">
+					<i class="bi bi-bicycle"></i>
+					<div class="content">
+						<h5>Free Shipping</h5>
+						<p>On all order over $39.00</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3 col-sm-6 col-md-6">
+				<div class="feature-block">
+					<i class="bi bi-wallet2"></i>
+					<div class="content">
+						<h5>30 Days Return</h5>
+						<p>Money back Guarantee</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3 col-sm-6 col-md-6">
+				<div class="feature-block">
+					<i class="bi bi-key"></i>
+					<div class="content">
+						<h5>Secure Checkout</h5>
+						<p>100% Protected by paypal</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3 col-sm-6 col-md-6">
+				<div class="feature-block">
+					<i class="bi bi-clock"></i>
+					<div class="content">
+						<h5>24/7 Support</h5>
+						<p>All time customer support </p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<footer class="footer">
+	<div class="container">
+		<div class="row">
+	        <div class="col-md-6 col-lg-4 col-sm-6 mb-5 mb-lg-0 text-center text-sm-left mr-auto">
+	          <div class="footer-widget">
+	          		<h4 class="mb-4"><img src="images/logo.png" alt="Vaxon." class="img-fluid"></h4>
+	          		<p class="lead">Iste dolores iure quis excepturi, deserunt praesentium.</p>
+		          	
+		          	<div class>
+		          		<p class="mb-0"><strong>Location : </strong>North South ,USA</p>
+		          		<p><strong>Support Email : </strong> support@email.com</p>
+		          	</div>
+	          </div>
+	        </div>
+
+	        <div class="col-md-6 col-lg-2 col-sm-6 mb-5 mb-lg-0 text-center text-sm-left">
+	        	<div class="footer-widget">
+		          <h4 class="mb-4">Category</h4>
+		          <ul class="pl-0 list-unstyled mb-0">
+		            <li><a href="shop.html">Men's Fashion</a></li>
+		            <li><a href="shop.html">Women's Fashion</a></li>
+		            <li><a href="shop.html">Kids Fashion</a></li>
+		            <li><a href="shop.html">Accessories</a></li>
+		            <li><a href="shop.html">Shoe Collection</a></li>
+		          </ul>
+			    </div>
+	        </div>
+
+	        <div class="col-md-6 col-lg-2 col-sm-6 mb-5 mb-lg-0 text-center text-sm-left">
+	        	 <div class="footer-widget">
+		          <h4 class="mb-4">Useful Link</h4>
+		          <ul class="pl-0 list-unstyled mb-0">
+		            <li><a href="about.html">News &amp; Tips</a></li>
+		            <li><a href="about.html">About Us</a></li>
+		            <li><a href="address.html">Support</a></li>
+		            <li><a href="shop.html">Our Shop</a></li>
+		            <li><a href="contact.html">Contact Us</a></li>
+		          </ul>
+	       	 	</div>
+	        </div>
+
+	        <div class="col-md-6 col-lg-3 col-sm-6 text-center text-sm-left">
+	        	 <div class="footer-widget">
+		          <h4 class="mb-4">Opening Hours</h4>
+		          <ul class="pl-0 list-unstyled mb-5">
+		            <li class="d-lg-flex justify-content-between">Monday-Friday <span>8.00-20.00</span></li>
+		            <li class="d-lg-flex justify-content-between">Saturday <span>10.00-20.00</span></li>
+		            <li class="d-lg-flex justify-content-between">Sunday <span>12-20.00</span></li>
+		          </ul>
+
+		          <h5>Call Now : +5(305) 785-0437</h5>
+		        </div>
+	        </div>
+	     </div>
+	</div>
+</footer>
+
+
+<div class="footer-btm py-4 ">
+	<div class="container">
+		<div class="row ">
+	     	<div class="col-lg-6">
+	     		<p class="copyright mb-0 ">@ Copyright Reserved to DzCoder Community &amp; made by <a href="#">Malik Korrich</a></p>
+	     	</div>
+	     	<div class="col-lg-6">
+	     		 <ul class="list-inline mb-0 footer-btm-links text-lg-right mt-2 mt-lg-0">
+		            <li class="list-inline-item"><a href="404.html">Privacy Policy</a></li>
+		            <li class="list-inline-item"><a href="404.html">Terms &amp; Conditions</a></li>
+		            <li class="list-inline-item"><a href="404.html">Cookie Policy</a></li>
+		            <li class="list-inline-item"><a href="404.html">Terms of Sale</a></li>
+		          </ul>
+	     	</div>
+	     </div>
+	</div>
+</div>
+
+
+
+    <!-- 
+    Essential Scripts
+    =====================================-->
+    
+    <!-- Main jQuery -->
+    <script src="js/jquery.min.js"></script>
+    <!-- Bootstrap 4.3.1 -->
+    <script src="js/bootstrap.min.js"></script>
+     <!-- Count Down Js -->
+    <script src="js/jquery.syotimer.min.js"></script>
+    <script src="js/bootstrap-slider.min.js"></script>
+    <!-- Slick Slider -->
+    <script src="js/slick.min.js"></script>
+    <!-- rating star -->
+    <script src="js/rating.js"></script>
+    <!-- Instagram Feed Js -->
+    <script src="js/instafeed.min.js"></script>
+    <!-- Google Mapl -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC72vZw-6tGqFyRhhg5CkF2fqfILn2Tsw"></script>
+    <script src="js/gmap.js"></script>
+
+    <!-- Main Js File -->
+    <script src="js/script.js"></script>
+
+  </body>
+  </html>
